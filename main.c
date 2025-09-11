@@ -34,7 +34,6 @@ void sortbycapacity(planes arr[], int size){
         arr[i] = temp;
     }
 }
-
 int main(void) {
     int choice;
     int status_key;
@@ -48,7 +47,7 @@ int main(void) {
     float coefficient;
     int delete_id;
     int total_capacity;
-    int Sum = 0 ;
+    int min_cap, max_cap;
 
     printf("WELCOME TO AIRPORT LOGS MANAGER v1.0\n");
     printf("---------------------------------\n");
@@ -90,8 +89,13 @@ int main(void) {
                     fgets(main_airport.infos[main_airport.nbr_planes].model, sizeof(main_airport.infos[main_airport.nbr_planes].model), stdin);
                     main_airport.infos[main_airport.nbr_planes].model[strcspn(main_airport.infos[main_airport.nbr_planes].model, "\n")] = 0;
                     
-                    printf("Please enter the plane [%d] capacity: ", i + 1);
-                    scanf("%d", &main_airport.infos[main_airport.nbr_planes].capacity);
+                    do {
+                        printf("Please enter the plane [%d] capacity: ", i + 1);
+                        scanf("%d", &main_airport.infos[main_airport.nbr_planes].capacity);
+                        if (main_airport.infos[main_airport.nbr_planes].capacity > 853 || main_airport.infos[main_airport.nbr_planes].capacity <= 0) {
+                            printf("Note : The largest plane in the world can carry only 853 passenger , be reasonable \n");
+                        }
+                    } while (main_airport.infos[main_airport.nbr_planes].capacity > 853 || main_airport.infos[main_airport.nbr_planes].capacity <= 0);
                     
                     printf("Plane status :\n");
                     printf("1 - Available\n");
@@ -217,49 +221,60 @@ int main(void) {
             }
                 
             case 4: 
-            printf("SEARCH PLANES\n");
-            printf("1- search by ID \n");
-            printf("2- search by model \n");
-            int search_choice;
-            printf("Select your search type : ");
-            scanf("%d",&search_choice);
-            switch(search_choice){
-                case 1 :
-                int search_id2;
-                printf("Please enter planes ID : ");
-                scanf("%d",&search_id2);
-                for ( int i=0 ; i < main_airport.nbr_planes ; i++){
-                    if ( search_id2 == main_airport.infos[i].id){
-                        printf("Plane [%d] infos :\n", i + 1);
-                        printf("  Plane ID: %d\n", main_airport.infos[i].id);
-                        printf("  Model: %s\n", main_airport.infos[i].model);
-                        printf("  Capacity: %d passengers\n", main_airport.infos[i].capacity);
-                        printf("  Status: %s\n", main_airport.infos[i].status);
-                        printf("---------------------------------\n");
+                printf("SEARCH PLANES\n");
+                printf("1- search by ID \n");
+                printf("2- search by model \n");
+                int search_choice;
+                printf("Select your search type : ");
+                scanf("%d",&search_choice);
+                switch(search_choice){
+                    case 1 : {
+                        int search_id2;
+                        int found = 0;
+                        printf("Please enter planes ID : ");
+                        scanf("%d",&search_id2);
+                        for ( int i=0 ; i < main_airport.nbr_planes ; i++){
+                            if ( search_id2 == main_airport.infos[i].id){
+                                printf("Plane [%d] infos :\n", i + 1);
+                                printf("  Plane ID: %d\n", main_airport.infos[i].id);
+                                printf("  Model: %s\n", main_airport.infos[i].model);
+                                printf("  Capacity: %d passengers\n", main_airport.infos[i].capacity);
+                                printf("  Status: %s\n", main_airport.infos[i].status);
+                                printf("---------------------------------\n");
+                                found = 1;
+                            }
+                        }
+                        if (!found) {
+                            printf("Plane with ID %d not found.\n", search_id2);
+                        }
+                        break;
                     }
-                }
-            
-                break;
-                case 2 :
-                getchar();
-                printf("Please enter plane model : ");
-                fgets(search_model , sizeof(search_model) , stdin);
-                search_model[strcspn(search_model, "\n")] = 0;
-                for ( int i=0 ; i < main_airport.nbr_planes ; i++){
-                    if ( strcmp (search_model , main_airport.infos[i].model) == 0 ){
-                        printf("Plane [%d] infos :\n", i + 1);
-                        printf("  Plane ID: %d\n", main_airport.infos[i].id);
-                        printf("  Model: %s\n", main_airport.infos[i].model);
-                        printf("  Capacity: %d passengers\n", main_airport.infos[i].capacity);
-                        printf("  Status: %s\n", main_airport.infos[i].status);
-                        printf("---------------------------------\n");
+                    case 2 : {
+                        int found = 0;
+                        getchar();
+                        printf("Please enter plane model : ");
+                        fgets(search_model , sizeof(search_model) , stdin);
+                        search_model[strcspn(search_model, "\n")] = 0;
+                        for ( int i=0 ; i < main_airport.nbr_planes ; i++){
+                            if ( strcmp (search_model , main_airport.infos[i].model) == 0 ){
+                                printf("Plane [%d] infos :\n", i + 1);
+                                printf("  Plane ID: %d\n", main_airport.infos[i].id);
+                                printf("  Model: %s\n", main_airport.infos[i].model);
+                                printf("  Capacity: %d passengers\n", main_airport.infos[i].capacity);
+                                printf("  Status: %s\n", main_airport.infos[i].status);
+                                printf("---------------------------------\n");
+                                found = 1;
+                            }
+                        }
+                        if (!found) {
+                            printf("Plane with model '%s' not found.\n", search_model);
+                        }
+                        break;
                     }
+                    default :
+                        printf("Invalid search type ! ");
                 }
-                break;
-                default :
-                printf("Invalid search type ! ");
-            }
-            break;   
+                break;   
             case 5: {
                 printf("Sorting planes by : \n");
                 printf("1- Capacity \n");
@@ -278,7 +293,7 @@ int main(void) {
                             printf("---------------------------------\n");
                         }
                         break;
-                    case 2:
+                    case 2 :
                         break;
                     default:
                         printf("Invalid sorting option!\n");
@@ -315,11 +330,12 @@ int main(void) {
                 break;
             }
                 
-            case 7 :
+            case 7 : {
                 printf("------------------------\n");
                 printf("%s AIRPORT STATISTICS : \n", main_airport.airport_name);
                 printf("-------------------------\n");
                 printf("Total number of planes : %d \n", main_airport.nbr_planes);
+                
                 available_planes = 0;
                 for (int i = 0; i < main_airport.nbr_planes; i++){
                     if (strcmp(main_airport.infos[i].status, "Available") == 0){
@@ -327,21 +343,43 @@ int main(void) {
                     }
                 }
                 printf("Number of available planes : %d \n", available_planes);
+                
                 if (main_airport.nbr_planes > 0){
-                    coefficient = (float)available_planes / main_airport.nbr_planes * 100;
+                    coefficient = (float)available_planes / main_airport.nbr_planes *  100;
                 } else {
                     coefficient = 0.0;
                 }   
                 printf("Availability coefficient : %.2f %% \n", coefficient);
                 
-                total_capacity = 0; // Initialize to 0
-                for(int i=0 ; i < main_airport.nbr_planes ; i++ ){
-                    total_capacity += main_airport.infos[i].capacity; // Fixed: changed =+ to +=
+                total_capacity = 0; 
+                for(int i = 0 ; i < main_airport.nbr_planes ; i++ ){
+                    total_capacity += main_airport.infos[i].capacity; 
                 }
-                printf("Total capacity : %d passengers\n", total_capacity);          
+                printf("Total capacity : %d passengers\n", total_capacity); 
+                
+                if (main_airport.nbr_planes > 0) {
+                    min_cap = main_airport.infos[0].capacity; 
+                    max_cap = main_airport.infos[0].capacity; 
+                    
+                    for(int i = 1 ; i < main_airport.nbr_planes ; i++) {
+                        if (main_airport.infos[i].capacity < min_cap) {
+                            min_cap = main_airport.infos[i].capacity;
+                        }
+                        if (main_airport.infos[i].capacity > max_cap) {
+                            max_cap = main_airport.infos[i].capacity;
+                        }
+                    }
+                    
+                    printf("Largest capacity: %d passengers\n", max_cap);
+                    printf("Smallest capacity: %d passengers\n", min_cap);
+                    
+                } else {
+                    printf("No planes to calculate min/max capacity\n");
+                }
                 break;
+            }
             case 8 :
-                printf("Exiting the program...\n");
+                printf("Exiting the program...\n"); 
                 exit(0);
                 break;
                 
