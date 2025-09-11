@@ -34,6 +34,18 @@ void sortbycapacity(planes arr[], int size){
         arr[i] = temp;
     }
 }
+void sortbyalphabetical(planes arr[], int size){
+    for (int i = 0; i < size - 1; i++){
+        int min_idx = i;
+        for (int j = i + 1; j < size; j++){
+            if (strcmp(arr[j].model, arr[min_idx].model) < 0)
+                min_idx = j;
+        }
+        planes temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
+    }
+}
 int main(void) {
     int choice;
     int status_key;
@@ -294,6 +306,14 @@ int main(void) {
                         }
                         break;
                     case 2 :
+                        sortbyalphabetical(main_airport.infos, main_airport.nbr_planes);
+                        printf("Planes sorted in alphabetical order \n");
+                        for (int i = 0; i < main_airport.nbr_planes; i++){
+                            printf("Plane [%d]:\n", i + 1);
+                            printf("  Model: %s\n", main_airport.infos[i].model);
+                            printf("  Capacity: %d passengers\n", main_airport.infos[i].capacity);
+                            printf("---------------------------------\n");
+                        }
                         break;
                     default:
                         printf("Invalid sorting option!\n");
@@ -370,7 +390,6 @@ int main(void) {
                         }
                     }
                     
-                    printf("Largest capacity: %d passengers\n", max_cap);
                     printf("Smallest capacity: %d passengers\n", min_cap);
                     
                 } else {
