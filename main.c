@@ -215,7 +215,36 @@ int main(void) {
             }
                 
             case 4: 
-                break;   
+            printf("SEARCH PLANES\n");
+            printf("1- search by ID \n");
+            printf("2- search by model \n");
+            int search_choice;
+            printf("Select your search type : ");
+            scanf("%d",&search_choice);
+            switch(search_choice){
+                case 1 :
+                int search_id2;
+                printf("Please enter planes ID : ");
+                scanf("%d",&search_id2);
+                for ( int i=0 ; i < main_airport.nbr_planes ; i++){
+                    if ( search_id2 == main_airport.infos[i].id){
+                        printf("Plane [%d] infos : \n",i);
+                        printf("Plane [%d]:\n", i + 1);
+                        printf("  Plane ID: %d\n", main_airport.infos[i].id);
+                        printf("  Model: %s\n", main_airport.infos[i].model);
+                        printf("  Capacity: %d passengers\n", main_airport.infos[i].capacity);
+                        printf("  Status: %s\n", main_airport.infos[i].status);
+                        printf("---------------------------------\n");
+                    }
+                }
+            
+                break;
+                case 2 :
+                break;
+                default :
+                printf("Invalid search type ! ");
+            }
+            break;   
             case 5: {
                 printf("Sorting planes by : \n");
                 printf("1- Capacity \n");
