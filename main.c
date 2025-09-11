@@ -47,6 +47,8 @@ int main(void) {
     int available_planes;
     float coefficient;
     int delete_id;
+    int total_capacity;
+    int Sum = 0 ;
 
     printf("WELCOME TO AIRPORT LOGS MANAGER v1.0\n");
     printf("---------------------------------\n");
@@ -228,8 +230,7 @@ int main(void) {
                 scanf("%d",&search_id2);
                 for ( int i=0 ; i < main_airport.nbr_planes ; i++){
                     if ( search_id2 == main_airport.infos[i].id){
-                        printf("Plane [%d] infos : \n",i);
-                        printf("Plane [%d]:\n", i + 1);
+                        printf("Plane [%d] infos :\n", i + 1);
                         printf("  Plane ID: %d\n", main_airport.infos[i].id);
                         printf("  Model: %s\n", main_airport.infos[i].model);
                         printf("  Capacity: %d passengers\n", main_airport.infos[i].capacity);
@@ -240,6 +241,20 @@ int main(void) {
             
                 break;
                 case 2 :
+                getchar();
+                printf("Please enter plane model : ");
+                fgets(search_model , sizeof(search_model) , stdin);
+                search_model[strcspn(search_model, "\n")] = 0;
+                for ( int i=0 ; i < main_airport.nbr_planes ; i++){
+                    if ( strcmp (search_model , main_airport.infos[i].model) == 0 ){
+                        printf("Plane [%d] infos :\n", i + 1);
+                        printf("  Plane ID: %d\n", main_airport.infos[i].id);
+                        printf("  Model: %s\n", main_airport.infos[i].model);
+                        printf("  Capacity: %d passengers\n", main_airport.infos[i].capacity);
+                        printf("  Status: %s\n", main_airport.infos[i].status);
+                        printf("---------------------------------\n");
+                    }
+                }
                 break;
                 default :
                 printf("Invalid search type ! ");
@@ -317,9 +332,14 @@ int main(void) {
                 } else {
                     coefficient = 0.0;
                 }   
-                printf("Availability coefficient : %.2f %% \n\n", coefficient);
-                break;
+                printf("Availability coefficient : %.2f %% \n", coefficient);
                 
+                total_capacity = 0; // Initialize to 0
+                for(int i=0 ; i < main_airport.nbr_planes ; i++ ){
+                    total_capacity += main_airport.infos[i].capacity; // Fixed: changed =+ to +=
+                }
+                printf("Total capacity : %d passengers\n", total_capacity);          
+                break;
             case 8 :
                 printf("Exiting the program...\n");
                 exit(0);
