@@ -69,8 +69,8 @@ int main(void) {
     printf("\n");
     
     do {
-        printf("------[MAIN MENU]-------\n");
-        printf("1- ADD A NEW PLANE \n");
+        printf("|------[MAIN MENU]-------|\n");
+        printf("1- ADD NEW PLANE(S) \n");
         printf("2- DISPLAY PLANES LIST \n");
         printf("3- UPDATE PLANE (MODEL,CAPACITY AND STATUS) \n");
         printf("4- SEARCH PLANE BY ID OR MODEL\n");
@@ -78,6 +78,7 @@ int main(void) {
         printf("6- DELETE A PLANE FROM THE LIST \n");
         printf("7- STATISTICS \n");
         printf("8- EXIT \n");
+        printf("|------------------------|\n");
         printf("PLEASE ENTER YOUR CHOICE : ");
         scanf("%d", &choice);
         
@@ -96,7 +97,8 @@ int main(void) {
                     
                     main_airport.infos[main_airport.nbr_planes].id = initial_id + main_airport.nbr_planes + 1;
                     
-                    getchar();  
+                    int c ;
+                    while ((c = getchar()) != '\n' && c != EOF);  
                     printf("Please enter the plane [%d] model: ", i + 1);
                     fgets(main_airport.infos[main_airport.nbr_planes].model, sizeof(main_airport.infos[main_airport.nbr_planes].model), stdin);
                     main_airport.infos[main_airport.nbr_planes].model[strcspn(main_airport.infos[main_airport.nbr_planes].model, "\n")] = 0;
@@ -331,16 +333,16 @@ int main(void) {
                     printf("-----------------------\n");
                 }
                 printf("Enter ID of the plane you want to delete: ");
-                scanf("%d", &search_id);
+                scanf("%d", &delete_id);
                 int found = 0;
                 for ( int i = 0 ; i < main_airport.nbr_planes ; i++){
-                    if ( search_id == main_airport.infos[i].id ){
+                    if ( delete_id == main_airport.infos[i].id ){
                         found = 1;
                         for (int j = i; j < main_airport.nbr_planes - 1; j++) {
                             main_airport.infos[j] = main_airport.infos[j+1];
                         }
                         main_airport.nbr_planes--;
-                        printf("Plane with ID %d deleted successfully!\n", search_id);
+                        printf("Plane with ID %d deleted successfully!\n", delete_id);
                         break;
                     }
                 }
@@ -390,6 +392,7 @@ int main(void) {
                         }
                     }
                     
+                    printf("Largest capacity : %d \n",max_cap);
                     printf("Smallest capacity: %d passengers\n", min_cap);
                     
                 } else {
